@@ -18,7 +18,4 @@ jobs:
           PACKAGIST_USERNAME: ${{ secrets.PACKAGIST_USERNAME }}
           PACKAGIST_TOKEN: ${{ secrets.PACKAGIST_TOKEN }}
         run: |
-          curl -X POST \
-            -H "Content-Type:application/json" \
-            -d '{"username": "${{ env.PACKAGIST_USERNAME }}", "apiToken": "${{ env.PACKAGIST_TOKEN }}"}' \
-            https://packagist.org/api/update/zuko/flex2cell
+          curl -XPOST -H'content-type:application/json' 'https://packagist.org/api/update-package?username=${{ env.PACKAGIST_USERNAME }}&apiToken=${{ env.PACKAGIST_TOKEN }}' -d'{"repository":{"url":"https://packagist.org/packages/zuko/flex2cell"}}'
