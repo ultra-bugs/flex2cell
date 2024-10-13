@@ -1,5 +1,6 @@
 {
     "name": "zuko/flex2cell",
+    "version"    : "1.0.0",
     "description": "A flexible and efficient library for exporting data to Excel (XLS, XLSX) with support for mappings, formatters, and handling large datasets. Working with less dependencies, avoid future breaks & conclusions.",
     "type": "library",
     "autoload": {
@@ -23,11 +24,11 @@
     "require-dev": {
         "laravel/pint": "^1.18"
     },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Vendor\\ExcelExport\\ExcelExportServiceProvider"
-      ]
+    "extra": {
+      "laravel": {
+        "providers": [
+          "Vendor\\ExcelExport\\ExcelExportServiceProvider"
+        ]
+      }
     }
-  }
 }
