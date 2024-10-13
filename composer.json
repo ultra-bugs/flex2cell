@@ -1,0 +1,21 @@
+{
+    "name": "zuko/flex2cell",
+    "description": "A flexible and efficient library for exporting data to Excel (XLS, XLSX) with support for mappings, formatters, and handling large datasets. Working with less dependencies, avoid future breaks & conlusions.",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Zuko\\Flex2cell\\": "src/"
+        },
+        "files": [
+          "src/aliases.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Zuko",
+            "email": "tansautn@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
