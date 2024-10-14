@@ -32,12 +32,24 @@ namespace Zuko\Flex2Cell\Traits;
 /**
  * Class HasExportAttributes
  *
- * @package App\Traits\ExcelExport
+ * @package Zuko\Flex2Cell\Traits
  */
 trait HasExportAttributes
 {
     protected $formatters = [];
 
+    /**
+     * Set the formatters to be used for formatting values when exporting.
+     *
+     * $formatters is an associative array, where the keys are the column names
+     * and the values are either a callable or an object that implements
+     * FormatterInterface. If the value is a string, it will be treated as a class
+     * name and an instance of that class will be created.
+     *
+     * @param array|callable[]|\Zuko\Flex2Cell\Contracts\FormatterInterface[] $formatters An associative array of formatters.
+     *
+     * @return static
+     */
     public function setFormatters(array $formatters)
     {
         foreach ($formatters as $key => $formatter) {
@@ -52,7 +64,19 @@ trait HasExportAttributes
         }
         return $this;
     }
-
+    /**
+     * Format a value for export.
+     *
+     * This method is called once for each value that is exported.
+     * The default implementation simply returns the value as is,
+     * but you can override this method in your class to change the
+     * behavior.
+     *
+     * @param string $mappingKey The key of the mapped column that is being exported.
+     * @param mixed $value The value that is being exported.
+     *
+     * @return mixed The formatted value.
+     */
     protected function formatValue($mappingKey, $value)
     {
         if (isset($this->formatters[$mappingKey])) {

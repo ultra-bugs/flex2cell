@@ -29,13 +29,14 @@
 namespace Zuko\Flex2Cell\Traits;
 
 
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 /**
  * Class ExcelExportable
  *
- * @package App\Traits\ExcelExport
+ * @package Zuko\Flex2Cell\Traits
  */
 trait ExcelExportable
 {
@@ -56,6 +57,10 @@ trait ExcelExportable
      * @var bool
      */
     protected $skipHeader = false;
+    /**
+     * @var array
+     */
+    protected $columnLetters = [];
 
     /**
      * @param $data
@@ -234,10 +239,10 @@ trait ExcelExportable
     {
         $columnIndex = 1;
         foreach ($this->headers as $header) {
-            if (!in_array($header, $this->hiddens)) {
-                $sheet->setCellValueByColumnAndRow($columnIndex, 1, $this->getHeader($header));
+            if (!in_array($header, $this->hiddens, true)) {
+                $sheet->setCellValue([$columnIndex, 1], $this->getHeader($header));
                 if (isset($this->subHeaders[$header])) {
-                    $sheet->setCellValueByColumnAndRow($columnIndex, 2, $this->getSubHeader($header));
+                    $sheet->setCellValue([$columnIndex, 2], $this->getSubHeader($header));
                 }
                 $columnIndex++;
             }
@@ -257,10 +262,10 @@ trait ExcelExportable
     {
         $columnIndex = 1;
         foreach ($this->mapping as $key => $header) {
-            if (!in_array($header, $this->hiddens)) {
+            if (!in_array($header, $this->hiddens, true)) {
                 $value = $this->getValue($row, $key);
                 $value = $this->formatValue($header, $value);
-                $sheet->setCellValueByColumnAndRow($columnIndex++, $rowIndex, $value);
+                $sheet->setCellValue([$columnIndex++, $rowIndex], $value);
             }
         }
     }
@@ -343,6 +348,17 @@ trait ExcelExportable
      *
      * @return mixed The formatted value.
      */
+    protected function formatValue($mappingKey, $value)
+    {
+        return $this->parentFormat($mappingKey, $value);
+    }
+
+    /**
+     * Get the column letter for a mapping key.
+     *
+     * @param string $mappingKey
+     * @return string
+     */
     protected function getColumnLetter($mappingKey)
     {
         if (!isset($this->columnLetters[$mappingKey])) {
@@ -352,11 +368,23 @@ trait ExcelExportable
         return $this->columnLetters[$mappingKey];
     }
 
+    /**
+     * Get the mapping key from a header.
+     *
+     * @param string $header The header
+     * @return string The mapping key if found, null otherwise
+     */
     protected function getMappingKeyFromHeader($header)
     {
-        return array_search($header, $this->mapping);
+        return array_search($header, $this->mapping, true);
     }
 
+    /**
+     * Get a header from a mapping key.
+     *
+     * @param string $mappingKey The mapping key
+     * @return string The header if found, null otherwise
+     */
     protected function getHeaderFromMappingKey($mappingKey)
     {
         return $this->mapping[$mappingKey] ?? null;

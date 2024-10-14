@@ -33,7 +33,7 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 /**
  * Class HasExportMerging
  *
- * @package App\Traits\ExcelExport
+ * @package Zuko\Flex2Cell\Traits
  */
 trait HasExportMerging
 {
