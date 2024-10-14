@@ -36,7 +36,7 @@ class ExcelExporter
      * @param string                                                                        $filename
      * @param array                                                                         $options
      *
-     * @return mixed
+     * @return bool
      */
     public static function export($data, $filename, array $options = [])
     {
@@ -88,11 +88,8 @@ class ExcelExporter
 //                     ->export('export.xlsx');
         return static::make()
                      ->setData($data)
-                     ->setHeaders($options['headers'] ?? array_keys(first($data)))
-                     ->setMapping($options['mapping']
-                                      ??
-                                      array_combine(array_keys(first($data)),
-                                                    array_keys(first($data))))
+                     ->setHeaders($options['headers'] ?? array_values($options['mapping'] ?? []))
+                     ->setMapping($options['mapping'] ?? array_combine(array_keys(self::first($data)), array_keys(self::first($data))))
                      ->setFormatters($options['formatters'] ?? [])
                      ->setColumnMergeRules($options['columnMergeRules'] ?? [])
                      ->setRowMergeRules($options['rowMergeRules'] ?? [])
@@ -103,4 +100,5 @@ class ExcelExporter
     {
         return new static;
     }
+
 }

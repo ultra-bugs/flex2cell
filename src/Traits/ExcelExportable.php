@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 /**
@@ -209,7 +210,7 @@ trait ExcelExportable
      *
      * @param string $filename The file name to export to.
      *
-     * @return void
+     * @return bool status of export based PHP Office reader load() result
      */
     public function export(string $filename)
     {
@@ -229,8 +230,24 @@ trait ExcelExportable
         }
         $this->applyMerging($sheet);
         $this->applyMetaSettings($spreadsheet);
-        $writer = new Xlsx($spreadsheet);
+        // get extension
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        $extension = strtolower($extension);
+        if ($extension === 'xls') {
+            $writer = new Xls($spreadsheet);
+            $validator = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+        } else {
+            $writer = new Xlsx($spreadsheet);
+            $validator = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+        }
         $writer->save($filename);
+        // validate output file using phpoffice
+        try {
+            $validator->load($filename);
+            return true;
+        } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
+            return false;
+        }
     }
 
     /**
@@ -315,7 +332,7 @@ trait ExcelExportable
      */
     protected function getValue($row, $key)
     {
-        return $this->dataGet($row, $key);
+        return self::dataGet($row, $key);
     }
 
     /**
@@ -327,7 +344,7 @@ trait ExcelExportable
      *
      * @return mixed
      */
-    protected function dataGet($target, $key, $default = null)
+    private static function dataGet($target, $key, $default = null)
     {
         if (is_null($key)) {
             return $target;
@@ -428,5 +445,25 @@ trait ExcelExportable
     protected function getHeaderFromMappingKey($mappingKey)
     {
         return $this->mapping[$mappingKey] ?? null;
+    }
+
+    private static function first(array $array, $callback = null, $default = null) {
+        if (is_null($callback)) {
+            if (empty($array)) {
+                return value($default);
+            }
+
+            foreach ($array as $item) {
+                return $item;
+            }
+        }
+
+        foreach ($array as $key => $value) {
+            if ($callback($value, $key)) {
+                return $value;
+            }
+        }
+
+        return value($default);
     }
 }

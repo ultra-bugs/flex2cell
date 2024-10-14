@@ -69,7 +69,11 @@ trait HasExportMerging
 
         return $this;
     }
-
+    protected function applyMerging($sheet)
+    {
+        $this->applyColumnMerging($sheet);
+        $this->applyRowMerging($sheet);
+    }
     protected function applyColumnMerging($sheet)
     {
         foreach ($this->columnMergeRules as $rule) {
