@@ -1,0 +1,14 @@
+{
+  "preset": "laravel",
+  "rules": {
+    "simplified_null_return": false,
+    "no_superfluous_phpdoc_tags": {
+      "allow_mixed" : true,
+      "remove_inheritdoc" : false
+    },
+    "new_with_braces": {
+      "anonymous_class": false,
+      "named_class": false
+    }
+  }
+}

@@ -30,15 +30,12 @@ class ExcelExporter
     use ExcelExportable {
         export as private exportExcel;
     }
-    public static function make()
-    {
-        return new static;
-    }
 
     /**
      * @param array|\Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection $data
-     * @param string $filename
-     * @param array $options
+     * @param string                                                                        $filename
+     * @param array                                                                         $options
+     *
      * @return mixed
      */
     public static function export($data, $filename, array $options = [])
@@ -89,14 +86,21 @@ class ExcelExporter
 //                                            'E' => ['field' => 'category.name']
 //                                        ])
 //                     ->export('export.xlsx');
-
         return static::make()
                      ->setData($data)
                      ->setHeaders($options['headers'] ?? array_keys(first($data)))
-                     ->setMapping($options['mapping'] ?? array_combine(array_keys(first($data)), array_keys(first($data))))
+                     ->setMapping($options['mapping']
+                                      ??
+                                      array_combine(array_keys(first($data)),
+                                                    array_keys(first($data))))
                      ->setFormatters($options['formatters'] ?? [])
                      ->setColumnMergeRules($options['columnMergeRules'] ?? [])
                      ->setRowMergeRules($options['rowMergeRules'] ?? [])
                      ->exportExcel($filename);
+    }
+
+    public static function make()
+    {
+        return new static;
     }
 }

@@ -62,8 +62,10 @@ trait HasExportAttributes
                 $this->formatters[$key] = $formatter;
             }
         }
+
         return $this;
     }
+
     /**
      * Format a value for export.
      *
@@ -73,7 +75,7 @@ trait HasExportAttributes
      * behavior.
      *
      * @param string $mappingKey The key of the mapped column that is being exported.
-     * @param mixed $value The value that is being exported.
+     * @param mixed  $value The value that is being exported.
      *
      * @return mixed The formatted value.
      */
@@ -85,6 +87,7 @@ trait HasExportAttributes
         if (method_exists($this, 'format' . str_replace('.', '', ucwords($mappingKey, '.')) . 'Attribute')) {
             return $this->{'format' . str_replace('.', '', ucwords($mappingKey, '.')) . 'Attribute'}($value);
         }
+
         return $value;
     }
 

@@ -43,7 +43,5 @@ class Flex2CellServiceProvider
         });
     }
 
-    public function boot()
-    {
-    }
+    public function boot() {}
 }

@@ -28,6 +28,7 @@
 
 namespace Zuko\Flex2Cell\Traits;
 
+
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
 /**
@@ -38,7 +39,7 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 trait HasExportMerging
 {
     protected $columnMergeRules = [];
-    protected $rowMergeRules = [];
+    protected $rowMergeRules    = [];
 
     public function setColumnMergeRules(array $rules)
     {
@@ -52,6 +53,7 @@ trait HasExportMerging
             $rule['shiftDown'] = $rule['shiftDown'] ?? false;
         }
         $this->columnMergeRules = $rules;
+
         return $this;
     }
 
@@ -64,6 +66,7 @@ trait HasExportMerging
                 $this->rowMergeRules[$key] = $rule;
             }
         }
+
         return $this;
     }
 
@@ -74,10 +77,9 @@ trait HasExportMerging
             $endColumn = $rule['end'];
             $sheet->mergeCells($startColumn . '1:' . $endColumn . '1');
             $sheet->setCellValue($startColumn . '1', $rule['label']);
-
             if ($rule['shiftDown']) {
                 $sheet->insertNewRowBefore(2);
-                for ($col = Coordinate::columnIndexFromString($startColumn); $col <= Coordinate::columnIndexFromString($endColumn); $col++) {
+                for ($col = Coordinate::columnIndexFromString($startColumn);$col <= Coordinate::columnIndexFromString($endColumn);$col++) {
                     $letter = Coordinate::stringFromColumnIndex($col);
                     $originalHeader = $sheet->getCell($letter . '3')->getValue();
                     $sheet->setCellValue($letter . '2', $originalHeader);
@@ -93,7 +95,7 @@ trait HasExportMerging
             $columnLetter = ctype_alpha($column) ? $column : $this->getColumnLetter($rule['field']);
             $startRow = 2;
             $currentValue = null;
-            for ($row = $startRow; $row <= $lastRow; $row++) {
+            for ($row = $startRow;$row <= $lastRow;$row++) {
                 $cellValue = $sheet->getCell($columnLetter . $row)->getValue();
                 if ($cellValue !== $currentValue) {
                     if ($currentValue !== null) {

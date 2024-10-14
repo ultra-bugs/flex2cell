@@ -29,6 +29,8 @@
 namespace Zuko\Flex2Cell\Traits;
 
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -46,13 +48,13 @@ trait ExcelExportable
     use HasExportMerging;
 
     protected $data;
-    protected $headers = [];
-    protected $subHeaders = [];
-    protected $mapping = [];
-    protected $hiddens = [];
+    protected $headers      = [];
+    protected $subHeaders   = [];
+    protected $mapping      = [];
+    protected $hiddens      = [];
     protected $metaSettings = [];
-    protected $chunkSize = 1000;
-    protected $appendMode = false;
+    protected $chunkSize    = 1000;
+    protected $appendMode   = false;
     /**
      * @var bool
      */
@@ -70,6 +72,7 @@ trait ExcelExportable
     public function setData($data)
     {
         $this->data = $data;
+
         return $this;
     }
 
@@ -83,6 +86,7 @@ trait ExcelExportable
     public function setHeaders(array $headers)
     {
         $this->headers = $headers;
+
         return $this;
     }
 
@@ -96,6 +100,7 @@ trait ExcelExportable
     public function setSubHeaders(array $subHeaders)
     {
         $this->subHeaders = $subHeaders;
+
         return $this;
     }
 
@@ -110,6 +115,7 @@ trait ExcelExportable
     public function setMapping(array $mapping)
     {
         $this->mapping = $mapping;
+
         return $this;
     }
 
@@ -123,6 +129,7 @@ trait ExcelExportable
     public function setHiddens(array $hiddens)
     {
         $this->hiddens = $hiddens;
+
         return $this;
     }
 
@@ -142,6 +149,7 @@ trait ExcelExportable
     public function setMetaSettings(array $metaSettings)
     {
         $this->metaSettings = $metaSettings;
+
         return $this;
     }
 
@@ -159,6 +167,7 @@ trait ExcelExportable
     public function setChunkSize(int $chunkSize)
     {
         $this->chunkSize = $chunkSize;
+
         return $this;
     }
 
@@ -173,6 +182,7 @@ trait ExcelExportable
     public function setAppendMode(bool $appendMode)
     {
         $this->appendMode = $appendMode;
+
         return $this;
     }
 
@@ -190,6 +200,7 @@ trait ExcelExportable
     public function setSkipHeader(bool $skipHeader)
     {
         $this->skipHeader = $skipHeader;
+
         return $this;
     }
 
@@ -204,26 +215,20 @@ trait ExcelExportable
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-
         if (!$this->appendMode || !$this->skipHeader) {
             $this->writeHeaders($sheet);
         }
-
         $rowIndex = $this->appendMode ? $sheet->getHighestRow() + 1 : 3; // Start from row 3 due to double header
-
-        if ($this->data instanceof \Illuminate\Support\Collection || $this->data instanceof \Illuminate\Database\Eloquent\Model) {
+        if ($this->data instanceof Collection || $this->data instanceof Model) {
             $this->data = $this->data->toArray();
         }
-
         foreach (array_chunk($this->data, $this->chunkSize) as $chunk) {
             foreach ($chunk as $row) {
                 $this->writeRow($sheet, $row, $rowIndex++);
             }
         }
-
         $this->applyMerging($sheet);
         $this->applyMetaSettings($spreadsheet);
-
         $writer = new Xlsx($spreadsheet);
         $writer->save($filename);
     }
@@ -250,11 +255,39 @@ trait ExcelExportable
     }
 
     /**
+     * Get a header value from the headers array.
+     *
+     * If the header does not exist, the value passed as an argument is returned.
+     *
+     * @param string $header The header for which to get the value
+     *
+     * @return string The header value
+     */
+    protected function getHeader($header)
+    {
+        return $header;
+    }
+
+    /**
+     * Get a sub-header value from the sub headers array.
+     *
+     * If the sub-header does not exist, an empty string is returned.
+     *
+     * @param string $header The header for which to get the sub-header value
+     *
+     * @return string The sub-header value
+     */
+    protected function getSubHeader($header)
+    {
+        return $this->subHeaders[$header] ?? '';
+    }
+
+    /**
      * Write a single row of data to the spreadsheet.
      *
      * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $sheet The worksheet to write the row to.
-     * @param array     $row   The row of data to write.
-     * @param int       $rowIndex The index of the row to write.
+     * @param array                                         $row The row of data to write.
+     * @param int                                           $rowIndex The index of the row to write.
      *
      * @return void
      */
@@ -268,6 +301,67 @@ trait ExcelExportable
                 $sheet->setCellValue([$columnIndex++, $rowIndex], $value);
             }
         }
+    }
+
+    /**
+     * Get a value from the data row for export.
+     *
+     * This method is called once for each value that is exported.
+     *
+     * @param array  $row
+     * @param string $key
+     *
+     * @return mixed
+     */
+    protected function getValue($row, $key)
+    {
+        return $this->dataGet($row, $key);
+    }
+
+    /**
+     * Get an item from an array or object using "dot" notation.
+     *
+     * @param mixed                 $target
+     * @param string|array|int|null $key
+     * @param mixed                 $default
+     *
+     * @return mixed
+     */
+    protected function dataGet($target, $key, $default = null)
+    {
+        if (is_null($key)) {
+            return $target;
+        }
+        $key = is_array($key) ? $key : explode('.', $key);
+        foreach ($key as $segment) {
+            if (is_array($target) && array_key_exists($segment, $target)) {
+                $target = $target[$segment];
+            } elseif (is_object($target) && isset($target->{$segment})) {
+                $target = $target->{$segment};
+            } else {
+                return $default;
+            }
+        }
+
+        return $target;
+    }
+
+    /**
+     * Format a value for export.
+     *
+     * This method is called once for each value that is exported.
+     * The default implementation simply returns the value as is,
+     * but you can override this method in your class to change the
+     * behavior.
+     *
+     * @param string $mappingKey The key of the mapped column that is being exported.
+     * @param mixed  $value The value that is being exported.
+     *
+     * @return mixed The formatted value.
+     */
+    protected function formatValue($mappingKey, $value)
+    {
+        return $this->parentFormat($mappingKey, $value);
     }
 
     /**
@@ -296,67 +390,10 @@ trait ExcelExportable
     }
 
     /**
-     * Get a header value from the headers array.
-     *
-     * If the header does not exist, the value passed as an argument is returned.
-     *
-     * @param string $header The header for which to get the value
-     * @return string The header value
-     */
-    protected function getHeader($header)
-    {
-        return $header;
-    }
-
-    /**
-     * Get a sub-header value from the sub headers array.
-     *
-     * If the sub-header does not exist, an empty string is returned.
-     *
-     * @param string $header The header for which to get the sub-header value
-     * @return string The sub-header value
-     */
-    protected function getSubHeader($header)
-    {
-        return $this->subHeaders[$header] ?? '';
-    }
-
-    /**
-     * Get a value from the data row for export.
-     *
-     * This method is called once for each value that is exported.
-     *
-     * @param array $row
-     * @param string $key
-     * @return mixed
-     */
-    protected function getValue($row, $key)
-    {
-        return $this->dataGet($row, $key);
-    }
-
-    /**
-     * Format a value for export.
-     *
-     * This method is called once for each value that is exported.
-     * The default implementation simply returns the value as is,
-     * but you can override this method in your class to change the
-     * behavior.
-     *
-     * @param string $mappingKey The key of the mapped column that is being exported.
-     * @param mixed $value The value that is being exported.
-     *
-     * @return mixed The formatted value.
-     */
-    protected function formatValue($mappingKey, $value)
-    {
-        return $this->parentFormat($mappingKey, $value);
-    }
-
-    /**
      * Get the column letter for a mapping key.
      *
      * @param string $mappingKey
+     *
      * @return string
      */
     protected function getColumnLetter($mappingKey)
@@ -365,6 +402,7 @@ trait ExcelExportable
             $index = array_search($mappingKey, array_keys($this->mapping));
             $this->columnLetters[$mappingKey] = Coordinate::stringFromColumnIndex($index + 1);
         }
+
         return $this->columnLetters[$mappingKey];
     }
 
@@ -372,6 +410,7 @@ trait ExcelExportable
      * Get the mapping key from a header.
      *
      * @param string $header The header
+     *
      * @return string The mapping key if found, null otherwise
      */
     protected function getMappingKeyFromHeader($header)
@@ -383,39 +422,11 @@ trait ExcelExportable
      * Get a header from a mapping key.
      *
      * @param string $mappingKey The mapping key
+     *
      * @return string The header if found, null otherwise
      */
     protected function getHeaderFromMappingKey($mappingKey)
     {
         return $this->mapping[$mappingKey] ?? null;
-    }
-
-    /**
-     * Get an item from an array or object using "dot" notation.
-     *
-     * @param  mixed  $target
-     * @param  string|array|int|null  $key
-     * @param  mixed  $default
-     * @return mixed
-     */
-    protected function dataGet($target, $key, $default = null)
-    {
-        if (is_null($key)) {
-            return $target;
-        }
-
-        $key = is_array($key) ? $key : explode('.', $key);
-
-        foreach ($key as $segment) {
-            if (is_array($target) && array_key_exists($segment, $target)) {
-                $target = $target[$segment];
-            } elseif (is_object($target) && isset($target->{$segment})) {
-                $target = $target->{$segment};
-            } else {
-                return $default;
-            }
-        }
-
-        return $target;
     }
 }

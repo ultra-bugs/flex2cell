@@ -14,7 +14,6 @@
  *          *    -  -  All Rights Reserved  -  -    *
  *          * * * * * * * * * * * * * * * * * * * * *
  */
-
 /**
  * --------------------------------------------------------------------------
  *
@@ -25,8 +24,7 @@
  * @FILE       : aliases.php
  * @CREATED    : 14:08 , 13/Oct/2024
  */
-(static function ()
-{
+(static function () {
     $classes = [];
     $namespaces = [
         'Flex2cell',
