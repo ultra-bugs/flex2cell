@@ -29,6 +29,8 @@
 namespace Zuko\Flex2Cell\Traits;
 
 
+use Zuko\Flex2Cell\Contracts\FormatterInterface;
+
 /**
  * Class HasExportAttributes
  *
@@ -53,7 +55,7 @@ trait HasExportAttributes
     public function setFormatters(array $formatters)
     {
         foreach ($formatters as $key => $formatter) {
-            if (is_string($formatter) && class_exists($formatter)) {
+            if (is_string($formatter) && class_exists($formatter) &&(new $formatter()) instanceof FormatterInterface) {
                 $formatter = new $formatter();
             }
             if (is_object($formatter) && method_exists($formatter, 'formatValue')) {
@@ -82,7 +84,7 @@ trait HasExportAttributes
     protected function formatValue($mappingKey, $value)
     {
         if (isset($this->formatters[$mappingKey])) {
-            return call_user_func($this->formatters[$mappingKey], $value);
+            return call_user_func($this->formatters[$mappingKey], [$value, $mappingKey]);
         }
         if (method_exists($this, 'format' . str_replace('.', '', ucwords($mappingKey, '.')) . 'Attribute')) {
             return $this->{'format' . str_replace('.', '', ucwords($mappingKey, '.')) . 'Attribute'}($value);

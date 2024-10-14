@@ -29,8 +29,6 @@
 namespace Zuko\Flex2Cell\Traits;
 
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
@@ -220,7 +218,9 @@ trait ExcelExportable
             $this->writeHeaders($sheet);
         }
         $rowIndex = $this->appendMode ? $sheet->getHighestRow() + 1 : 3; // Start from row 3 due to double header
-        if ($this->data instanceof Collection || $this->data instanceof Model) {
+        /** @noinspection PhpUndefinedClassInspection */
+        /** @noinspection PhpUndefinedNamespaceInspection */
+        if ($this->data instanceof \Illuminate\Support\Collection || $this->data instanceof \Illuminate\Database\Eloquent\Model) {
             $this->data = $this->data->toArray();
         }
         foreach (array_chunk($this->data, $this->chunkSize) as $chunk) {
@@ -259,12 +259,15 @@ trait ExcelExportable
      */
     protected function writeHeaders($sheet)
     {
+        $this->headerRowIndex = 1; // Start with assuming headers are in the first row
         $columnIndex = 1;
         foreach ($this->headers as $header) {
             if (!in_array($header, $this->hiddens, true)) {
-                $sheet->setCellValue([$columnIndex, 1], $this->getHeader($header));
+                $displayHeader = $this->getHeader($header);
+                $sheet->setCellValue([$columnIndex, $this->headerRowIndex], $displayHeader);
                 if (isset($this->subHeaders[$header])) {
-                    $sheet->setCellValue([$columnIndex, 2], $this->getSubHeader($header));
+                    $sheet->setCellValue([$columnIndex, $this->headerRowIndex + 1], $this->getSubHeader($header));
+                    $this->headerRowIndex = 2; // If we have subheaders, main headers are now in row 2
                 }
                 $columnIndex++;
             }
@@ -428,7 +431,7 @@ trait ExcelExportable
      *
      * @param string $header The header
      *
-     * @return string The mapping key if found, null otherwise
+     * @return string|null The mapping key if found, null otherwise
      */
     protected function getMappingKeyFromHeader($header)
     {
@@ -440,7 +443,7 @@ trait ExcelExportable
      *
      * @param string $mappingKey The mapping key
      *
-     * @return string The header if found, null otherwise
+     * @return string|null The header if found, null otherwise
      */
     protected function getHeaderFromMappingKey($mappingKey)
     {
@@ -450,7 +453,7 @@ trait ExcelExportable
     private static function first(array $array, $callback = null, $default = null) {
         if (is_null($callback)) {
             if (empty($array)) {
-                return value($default);
+                return $default;
             }
 
             foreach ($array as $item) {
@@ -464,6 +467,6 @@ trait ExcelExportable
             }
         }
 
-        return value($default);
+        return $default;
     }
 }

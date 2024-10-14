@@ -76,17 +76,42 @@ trait HasExportMerging
     }
     protected function applyColumnMerging($sheet)
     {
+        $mergedRanges = [];
+        $hasShifted = false;
         foreach ($this->columnMergeRules as $rule) {
             $startColumn = $rule['start'];
             $endColumn = $rule['end'];
-            $sheet->mergeCells($startColumn . '1:' . $endColumn . '1');
-            $sheet->setCellValue($startColumn . '1', $rule['label']);
-            if ($rule['shiftDown']) {
-                $sheet->insertNewRowBefore(2);
-                for ($col = Coordinate::columnIndexFromString($startColumn);$col <= Coordinate::columnIndexFromString($endColumn);$col++) {
-                    $letter = Coordinate::stringFromColumnIndex($col);
-                    $originalHeader = $sheet->getCell($letter . '3')->getValue();
-                    $sheet->setCellValue($letter . '2', $originalHeader);
+            $targetRow = $this->headerRowIndex;
+            if ($rule['shiftDown'] ?? false) {
+                // Insert a new row above the current header row
+                if(!$hasShifted) {
+                    $sheet->insertNewRowBefore($this->headerRowIndex);
+                    $this->headerRowIndex++;
+                    $targetRow = ($this->headerRowIndex - 1);
+                    $hasShifted = true;
+                }
+                // Set the merged header value
+                $sheet->setCellValue($startColumn . $targetRow, $rule['label']);
+
+                // Merge the cells
+                $sheet->mergeCells($startColumn . $targetRow . ':' . $endColumn . $targetRow);
+                $startColumn = Coordinate::columnIndexFromString($startColumn);
+                $endColumn = Coordinate::columnIndexFromString($endColumn);
+                if(!in_array($ranges = range($startColumn, $endColumn), $mergedRanges, true)){
+                    $mergedRanges[] = $ranges;
+                }
+            } else {
+                // If not shifting down, merge at the current header row
+                $sheet->mergeCells($startColumn . $this->headerRowIndex . ':' . $endColumn . $this->headerRowIndex);
+                $sheet->setCellValue($startColumn . $this->headerRowIndex, $rule['label']);
+            }
+        }
+        if($hasShifted){
+            $flat = array_merge(...$mergedRanges);
+            foreach ($this->headers as $index => $header) {
+                if(!in_array($index, $flat, true)){
+                    $curLetter = Coordinate::stringFromColumnIndex($index);
+                    $sheet->mergeCells($curLetter . $this->headerRowIndex . ':' . $curLetter . ($this->headerRowIndex - 1));
                 }
             }
         }

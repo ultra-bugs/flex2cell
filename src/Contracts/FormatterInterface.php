@@ -36,5 +36,18 @@ namespace Zuko\Flex2Cell\Contracts;
  */
 interface FormatterInterface
 {
-    public function formatValue($value);
+    /**
+     * Format a value for export.
+     *
+     * This method is called once for each cell value that is exported.
+     * The default implementation simply returns the value as is,
+     * but you can override this method in your class to change the
+     * behavior.
+     *
+     * @param mixed  $value The value that is being exported.
+     * @param string $mappingKey The key of the mapped column that is being exported.
+     *
+     * @return mixed The formatted value.
+     */
+    public function formatValue($value, $mappingKey);
 }
