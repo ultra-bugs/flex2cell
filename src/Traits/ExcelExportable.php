@@ -333,7 +333,7 @@ trait ExcelExportable
      *
      * @return mixed
      */
-    protected function getValue($row, $key)
+    protected function getValue($row, $key = null)
     {
         return self::dataGet($row, $key);
     }
