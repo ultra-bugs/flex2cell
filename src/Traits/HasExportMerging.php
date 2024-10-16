@@ -78,10 +78,10 @@ trait HasExportMerging
     {
         $mergedRanges = [];
         $hasShifted = false;
+        $targetRow = $this->headerRowIndex;
         foreach ($this->columnMergeRules as $rule) {
             $startColumn = $rule['start'];
             $endColumn = $rule['end'];
-            $targetRow = $this->headerRowIndex;
             if ($rule['shiftDown'] ?? false) {
                 // Insert a new row above the current header row
                 if(!$hasShifted) {
@@ -92,7 +92,6 @@ trait HasExportMerging
                 }
                 // Set the merged header value
                 $sheet->setCellValue($startColumn . $targetRow, $rule['label']);
-
                 // Merge the cells
                 $sheet->mergeCells($startColumn . $targetRow . ':' . $endColumn . $targetRow);
                 $startColumn = Coordinate::columnIndexFromString($startColumn);

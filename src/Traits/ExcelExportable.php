@@ -42,7 +42,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 trait ExcelExportable
 {
     use HasExportAttributes {
-        HasExportAttributes::formatValue as parentFormat;
+        formatValue as parentFormat;
     }
     use HasExportMerging;
 
@@ -317,7 +317,7 @@ trait ExcelExportable
         foreach ($this->mapping as $key => $header) {
             if (!in_array($header, $this->hiddens, true)) {
                 $value = $this->getValue($row, $key);
-                $value = $this->formatValue($header, $value);
+                $value = $this->formatValue($key, $value, $this->getValue($row));
                 $sheet->setCellValue([$columnIndex++, $rowIndex], $value);
             }
         }

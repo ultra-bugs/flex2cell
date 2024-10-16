@@ -78,13 +78,21 @@ trait HasExportAttributes
      *
      * @param string $mappingKey The key of the mapped column that is being exported.
      * @param mixed  $value The value that is being exported.
+     * @param mixed $rowItem The current processing row item
      *
      * @return mixed The formatted value.
      */
-    protected function formatValue($mappingKey, $value)
+    protected function formatValue($mappingKey, $value, $rowItem = null)
     {
+        // TODO : support for wildcard keys
+        if(@!$mappingKey){
+            return $value;
+        }
         if (isset($this->formatters[$mappingKey])) {
-            return call_user_func($this->formatters[$mappingKey], [$value, $mappingKey]);
+            if(is_callable($this->formatters[$mappingKey])){
+                return call_user_func_array($this->formatters[$mappingKey], [$value, $mappingKey, $rowItem]);
+            }
+            return $this->formatters[$mappingKey];
         }
         if (method_exists($this, 'format' . str_replace('.', '', ucwords($mappingKey, '.')) . 'Attribute')) {
             return $this->{'format' . str_replace('.', '', ucwords($mappingKey, '.')) . 'Attribute'}($value);
