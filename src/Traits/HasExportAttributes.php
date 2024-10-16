@@ -90,7 +90,8 @@ trait HasExportAttributes
         }
         if (isset($this->formatters[$mappingKey])) {
             if(is_callable($this->formatters[$mappingKey])){
-                return call_user_func_array($this->formatters[$mappingKey], [$value, $mappingKey, $rowItem]);
+
+                return call_user_func($this->formatters[$mappingKey], $value, $mappingKey, $rowItem);
             }
             return $this->formatters[$mappingKey];
         }

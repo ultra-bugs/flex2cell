@@ -376,12 +376,13 @@ trait ExcelExportable
      *
      * @param string $mappingKey The key of the mapped column that is being exported.
      * @param mixed  $value The value that is being exported.
+     * @param mixed $rowItem The current processing row item
      *
      * @return mixed The formatted value.
      */
-    protected function formatValue($mappingKey, $value)
+    protected function formatValue($mappingKey, $value, $rowItem = null)
     {
-        return $this->parentFormat($mappingKey, $value);
+        return $this->parentFormat($mappingKey, $value, $rowItem);
     }
 
     /**
