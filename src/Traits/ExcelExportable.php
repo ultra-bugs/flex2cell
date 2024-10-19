@@ -35,7 +35,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 /**
- * Class ExcelExportable
+ * Trait ExcelExportable
  *
  * @package Zuko\Flex2Cell\Traits
  */
@@ -261,6 +261,7 @@ trait ExcelExportable
     {
         $this->headerRowIndex = 1; // Start with assuming headers are in the first row
         $columnIndex = 1;
+        // Loop through each header
         foreach ($this->headers as $header) {
             if (!in_array($header, $this->hiddens, true)) {
                 $displayHeader = $this->getHeader($header);
@@ -269,9 +270,18 @@ trait ExcelExportable
                     $sheet->setCellValue([$columnIndex, $this->headerRowIndex + 1], $this->getSubHeader($header));
                     $this->headerRowIndex = 2; // If we have subheaders, main headers are now in row 2
                 }
+                // Apply bold styling to the headers
+                $sheet->getStyle([$columnIndex, 1])->getFont()->setBold(true);
+                if ($this->headerRowIndex === 2) {
+                    // Apply bold styling to the subheaders
+                    $sheet->getStyle($columnIndex, 2)->getFont()->setBold(true);
+                }
                 $columnIndex++;
             }
         }
+        // Freeze the top header row(s) to make them sticky when scrolling
+        $freezePaneRow = $this->headerRowIndex + 1; // If subheaders exist, freeze after row 2, else row 1
+        $sheet->freezePane([1, $freezePaneRow]);
     }
 
     /**

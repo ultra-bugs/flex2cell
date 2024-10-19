@@ -25,17 +25,25 @@
  * @CREATED    : 14:08 , 13/Oct/2024
  */
 (static function () {
-    $classes = [];
+    $classes = [
+        \Zuko\Flex2Cell\ExcelExporter::class,
+        \Zuko\Flex2Cell\Flex2CellServiceProvider::class,
+    ];
     $namespaces = [
-        'Flex2cell',
         'FlexExcel',
         'FlexToExcel',
-        'ExcelFlexible',
+        'FlexibleExcelExport',
+        'LaravelExcelExport',
     ];
-    foreach ($classes as $c) {
-        foreach ($namespaces as $n) {
-            $a = str_replace('Flex2Cell', $n, $c);
-            class_alias($c, $a);
+
+    foreach ($classes as $originalClass) {
+        foreach ($namespaces as $namespace) {
+            $aliasClass = str_replace('Flex2Cell', $namespace, $originalClass);
+            class_alias($originalClass, $aliasClass);
+
+            /**
+             * @alias $aliasClass
+             */
         }
     }
 })();

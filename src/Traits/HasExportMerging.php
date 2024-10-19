@@ -32,7 +32,7 @@ namespace Zuko\Flex2Cell\Traits;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
 /**
- * Class HasExportMerging
+ * Trait HasExportMerging
  *
  * @package Zuko\Flex2Cell\Traits
  */
@@ -41,6 +41,22 @@ trait HasExportMerging
     protected $columnMergeRules = [];
     protected $rowMergeRules    = [];
 
+    /**
+     * Sets the column merge rules for the export.
+     *
+     * The `$rules` parameter must be an associative array of column merge rules.
+     * Each rule is an associative array with the following keys:
+     *
+     * - `start`: The starting column letter or index of the merge range.
+     * - `end`: The ending column letter or index of the merge range.
+     * - `shiftDown`: An optional boolean indicating if the merge should be shifted down to the row below the header row.
+     *
+     * If the `start` or `end` values are provided as integers, they will be converted to column letters.
+     *
+     * @param array $rules The column merge rules.
+     *
+     * @return static
+     */
     public function setColumnMergeRules(array $rules)
     {
         foreach ($rules as &$rule) {
@@ -57,6 +73,16 @@ trait HasExportMerging
         return $this;
     }
 
+    /**
+     * Sets the row merge rules for the export.
+     *
+     * The `$rules` parameter can be either an associative array of column letters mapped to their respective field names,
+     * or a numeric array of field names. If the latter, the column letters will be automatically determined by the export.
+     *
+     * @param array $rules An associative array of column letters mapped to their respective field names, or a numeric array of field names.
+     *
+     * @return static
+     */
     public function setRowMergeRules(array $rules)
     {
         foreach ($rules as $key => $rule) {
@@ -69,11 +95,29 @@ trait HasExportMerging
 
         return $this;
     }
+
+    /**
+     * Applies both column and row merging rules to the given sheet.
+     *
+     * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $sheet The sheet to apply merging rules to.
+     *
+     * @return void
+     */
     protected function applyMerging($sheet)
     {
         $this->applyColumnMerging($sheet);
         $this->applyRowMerging($sheet);
     }
+    /**
+     * Applies column merging rules to the given sheet.
+     *
+     * The rules are applied by either inserting a new row above the current header row
+     * and setting the merged header value, or by merging the cells at the current header row.
+     *
+     * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $sheet The sheet to apply column merging rules to.
+     *
+     * @return void
+     */
     protected function applyColumnMerging($sheet)
     {
         $mergedRanges = [];
@@ -116,6 +160,19 @@ trait HasExportMerging
         }
     }
 
+    /**
+     * Applies row merging to the given sheet according to the row merge rules.
+     *
+     * This method iterates over the rows of the sheet, and for each row, it
+     * checks if the value in the given column matches the previous row's value.
+     * If it does, it merges the cells in the given column from the start row
+     * to the current row. If it doesn't, it resets the start row to the current
+     * row and continues.
+     *
+     * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $sheet The sheet to apply row merging to.
+     *
+     * @return void
+     */
     protected function applyRowMerging($sheet)
     {
         $lastRow = $sheet->getHighestRow();

@@ -32,7 +32,7 @@ namespace Zuko\Flex2Cell\Traits;
 use Zuko\Flex2Cell\Contracts\FormatterInterface;
 
 /**
- * Class HasExportAttributes
+ * Trait HasExportAttributes
  *
  * @package Zuko\Flex2Cell\Traits
  */
@@ -78,7 +78,7 @@ trait HasExportAttributes
      *
      * @param string $mappingKey The key of the mapped column that is being exported.
      * @param mixed  $value The value that is being exported.
-     * @param mixed $rowItem The current processing row item
+     * @param \Illuminate\Database\Eloquent\Model|mixed $rowItem The current processing row item
      *
      * @return mixed The formatted value.
      */

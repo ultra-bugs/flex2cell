@@ -22,7 +22,10 @@ use Zuko\Flex2Cell\Traits\ExcelExportable;
 
 /**
  * Class ExcelExporter
- *
+ * @alias \Zuko\Flex2Cell\ExcelExporter \Zuko\FlexExcel\ExcelExporter
+ * @alias \Zuko\Flex2Cell\ExcelExporter \Zuko\FlexToExcel\ExcelExporter
+ * @alias \Zuko\Flex2Cell\ExcelExporter \Zuko\FlexibleExcelExport\ExcelExporter
+ * @alias \Zuko\Flex2Cell\ExcelExporter \Zuko\LaravelExcelExport\ExcelExporter
  * @package Zuko\Flex2Cell
  */
 class ExcelExporter

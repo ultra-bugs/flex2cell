@@ -3,6 +3,10 @@
   "description"       : "A flexible and efficient library for exporting data to Excel (XLS, XLSX) with support for mappings, formatters, and handling large datasets. Working with less dependencies, avoid future breaks & conclusions.",
   "type"              : "library",
   "license"           : "MIT",
+  "replace": {
+    "zuko/excel-exporter": "self.version",
+    "zuko/laravel-excel-export": "self.version"
+  },
   "autoload"          : {
     "psr-4" : {
       "Zuko\\Flex2Cell\\" : "src/"

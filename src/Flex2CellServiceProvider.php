@@ -32,15 +32,22 @@ namespace Zuko\Flex2Cell;
 /**
  * Class Flex2CellServiceProvider
  *
+ * @alias \Zuko\Flex2Cell\Flex2CellServiceProvider \Zuko\FlexExcel\Flex2CellServiceProvider
+ * @alias \Zuko\Flex2Cell\Flex2CellServiceProvider \Zuko\FlexToExcel\Flex2CellServiceProvider
+ * @alias \Zuko\Flex2Cell\Flex2CellServiceProvider \Zuko\FlexibleExcelExport\Flex2CellServiceProvider
+ * @alias \Zuko\Flex2Cell\Flex2CellServiceProvider \Zuko\LaravelExcelExport\Flex2CellServiceProvider
  * @package Zuko\Flex2Cell
  */
-class Flex2CellServiceProvider
+class Flex2CellServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     public function register()
     {
-        $this->app->bind('Flex2Cell', function ($app) {
-            return new ExcelExporter();
-        });
+        $names = ['LaravelExcelExport', 'Flex2Cell'];
+        foreach ($names as $name) {
+            $this->app->bind($name, function ($app) {
+                return new ExcelExporter();
+            });
+        }
     }
 
     public function boot() {}
