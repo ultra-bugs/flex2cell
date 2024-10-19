@@ -43,7 +43,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Zuko\\Flex2Cell\\Traits\\ExcelExportable",
             "name": "ExcelExportable",
-            "summary": "Class\u0020ExcelExportable",
+            "summary": "Trait\u0020ExcelExportable",
             "url": "classes/Zuko-Flex2Cell-Traits-ExcelExportable.html"
         },                {
             "fqsen": "\\Zuko\\Flex2Cell\\Traits\\ExcelExportable\u003A\u003AsetData\u0028\u0029",
@@ -86,10 +86,10 @@ Search.appendIndex(
             "summary": "Set\u0020whether\u0020the\u0020export\u0020should\u0020append\u0020to\u0020an\u0020existing\u0020file\u0020or\u0020replace\u0020the\u0020file.",
             "url": "classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#method_setAppendMode"
         },                {
-            "fqsen": "\\Zuko\\Flex2Cell\\Traits\\ExcelExportable\u003A\u003AsetSkipHeader\u0028\u0029",
-            "name": "setSkipHeader",
+            "fqsen": "\\Zuko\\Flex2Cell\\Traits\\ExcelExportable\u003A\u003AsetSkipNotInHeader\u0028\u0029",
+            "name": "setSkipNotInHeader",
             "summary": "Set\u0020whether\u0020the\u0020export\u0020should\u0020write\u0020the\u0020header\u0020row\u0020or\u0020not.",
-            "url": "classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#method_setSkipHeader"
+            "url": "classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#method_setSkipNotInHeader"
         },                {
             "fqsen": "\\Zuko\\Flex2Cell\\Traits\\ExcelExportable\u003A\u003Aexport\u0028\u0029",
             "name": "export",
@@ -196,10 +196,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#property_appendMode"
         },                {
-            "fqsen": "\\Zuko\\Flex2Cell\\Traits\\ExcelExportable\u003A\u003A\u0024skipHeader",
-            "name": "skipHeader",
+            "fqsen": "\\Zuko\\Flex2Cell\\Traits\\ExcelExportable\u003A\u003A\u0024skipNotInHeader",
+            "name": "skipNotInHeader",
             "summary": "",
-            "url": "classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#property_skipHeader"
+            "url": "classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#property_skipNotInHeader"
         },                {
             "fqsen": "\\Zuko\\Flex2Cell\\Traits\\ExcelExportable\u003A\u003A\u0024columnLetters",
             "name": "columnLetters",
@@ -208,7 +208,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Zuko\\Flex2Cell\\Traits\\HasExportAttributes",
             "name": "HasExportAttributes",
-            "summary": "Class\u0020HasExportAttributes",
+            "summary": "Trait\u0020HasExportAttributes",
             "url": "classes/Zuko-Flex2Cell-Traits-HasExportAttributes.html"
         },                {
             "fqsen": "\\Zuko\\Flex2Cell\\Traits\\HasExportAttributes\u003A\u003AsetFormatters\u0028\u0029",
@@ -228,7 +228,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Zuko\\Flex2Cell\\Traits\\HasExportMerging",
             "name": "HasExportMerging",
-            "summary": "Class\u0020HasExportMerging",
+            "summary": "Trait\u0020HasExportMerging",
             "url": "classes/Zuko-Flex2Cell-Traits-HasExportMerging.html"
         },                {
             "fqsen": "\\Zuko\\Flex2Cell\\Traits\\HasExportMerging\u003A\u003AsetColumnMergeRules\u0028\u0029",

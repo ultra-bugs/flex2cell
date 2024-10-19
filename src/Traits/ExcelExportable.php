@@ -57,7 +57,7 @@ trait ExcelExportable
     /**
      * @var bool
      */
-    protected $skipHeader = false;
+    protected $skipNotInHeader = true;
     /**
      * @var array
      */
@@ -185,20 +185,18 @@ trait ExcelExportable
         return $this;
     }
 
+
     /**
      * Set whether the export should write the header row or not.
      *
-     * The header row is the first row of the spreadsheet and is used to
-     * label the columns. If this is set to true, the export will skip
-     * writing the header row.
-     *
-     * @param bool $skipHeader If true, the export will skip writing the header row.
+     * @param bool $skipNotInHeader If true, the export will not write the header row.
+     * If false, the export will write the header row.
      *
      * @return static
      */
-    public function setSkipHeader(bool $skipHeader)
+    public function setSkipNotInHeader(bool $skipNotInHeader)
     {
-        $this->skipHeader = $skipHeader;
+        $this->skipNotInHeader = $skipNotInHeader;
 
         return $this;
     }
@@ -214,11 +212,11 @@ trait ExcelExportable
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        if (!$this->appendMode || !$this->skipHeader) {
+        if (!$this->appendMode) {
             $this->writeHeaders($sheet);
         }
-        $rowIndex = $this->appendMode ? $sheet->getHighestRow() + 1 : 3; // Start from row 3 due to double header
-        /** @noinspection PhpUndefinedClassInspection */
+        $rowIndex =
+            $this->appendMode ? $sheet->getHighestRow() + 1 : 3; // Start from row 3 due to double header /** @noinspection PhpUndefinedClassInspection */
         /** @noinspection PhpUndefinedNamespaceInspection */
         if ($this->data instanceof \Illuminate\Support\Collection || $this->data instanceof \Illuminate\Database\Eloquent\Model) {
             $this->data = $this->data->toArray();
@@ -244,8 +242,10 @@ trait ExcelExportable
         // validate output file using phpoffice
         try {
             $validator->load($filename);
+
             return true;
-        } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
+        }
+        catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
             return false;
         }
     }
@@ -256,6 +256,7 @@ trait ExcelExportable
      * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $sheet The worksheet to write the headers to.
      *
      * @return void
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function writeHeaders($sheet)
     {
@@ -325,11 +326,15 @@ trait ExcelExportable
     {
         $columnIndex = 1;
         foreach ($this->mapping as $key => $header) {
-            if (!in_array($header, $this->hiddens, true)) {
-                $value = $this->getValue($row, $key);
-                $value = $this->formatValue($key, $value, $this->getValue($row));
-                $sheet->setCellValue([$columnIndex++, $rowIndex], $value);
+            if ($this->skipNotInHeader && !in_array($header, $this->headers, true)) {
+                continue;
             }
+            if (in_array($header, $this->hiddens, true)) {
+                continue;
+            }
+            $value = $this->getValue($row, $key);
+            $value = $this->formatValue($key, $value, $this->getValue($row));
+            $sheet->setCellValue([$columnIndex++, $rowIndex], $value);
         }
     }
 
@@ -386,7 +391,7 @@ trait ExcelExportable
      *
      * @param string $mappingKey The key of the mapped column that is being exported.
      * @param mixed  $value The value that is being exported.
-     * @param mixed $rowItem The current processing row item
+     * @param mixed  $rowItem The current processing row item
      *
      * @return mixed The formatted value.
      */
@@ -461,17 +466,16 @@ trait ExcelExportable
         return $this->mapping[$mappingKey] ?? null;
     }
 
-    private static function first(array $array, $callback = null, $default = null) {
+    private static function first(array $array, $callback = null, $default = null)
+    {
         if (is_null($callback)) {
             if (empty($array)) {
                 return $default;
             }
-
             foreach ($array as $item) {
                 return $item;
             }
         }
-
         foreach ($array as $key => $value) {
             if ($callback($value, $key)) {
                 return $value;

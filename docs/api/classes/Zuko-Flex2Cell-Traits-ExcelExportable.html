@@ -114,7 +114,7 @@
 
     </aside>
 
-            <p class="phpdocumentor-summary">Class ExcelExportable</p>
+            <p class="phpdocumentor-summary">Trait ExcelExportable</p>
 
 
 
@@ -193,7 +193,7 @@
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a class="" href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#property_skipHeader">$skipHeader</a>
+    <a class="" href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#property_skipNotInHeader">$skipNotInHeader</a>
     <span>
                         &nbsp;: bool            </span>
 </dt>
@@ -268,7 +268,7 @@
 <dd>Set the meta settings of the export.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a class="" href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#method_setSkipHeader">setSkipHeader()</a>
+    <a class="" href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#method_setSkipNotInHeader">setSkipNotInHeader()</a>
     <span>
                                 &nbsp;: static    </span>
 </dt>
@@ -673,9 +673,9 @@
             -protected
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_skipHeader">
-        $skipHeader
-        <a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#property_skipHeader" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_skipNotInHeader">
+        $skipNotInHeader
+        <a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#property_skipNotInHeader" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
                                 </span>
@@ -692,8 +692,8 @@
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">bool</span>
-    <span class="phpdocumentor-signature__name">$skipHeader</span>
-     = <span class="phpdocumentor-signature__default-value">false</span></code>
+    <span class="phpdocumentor-signature__name">$skipNotInHeader</span>
+     = <span class="phpdocumentor-signature__default-value">true</span></code>
 
     
     
@@ -760,7 +760,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Traits/ExcelExportable.php"><a href="files/src-traits-excelexportable.html"><abbr title="src/Traits/ExcelExportable.php">ExcelExportable.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">213</span>
+    <span class="phpdocumentor-element-found-in__line">211</span>
 
     </aside>
 
@@ -1169,15 +1169,15 @@ the number of data rows that are processed at a time.</p>
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_setSkipHeader">
-        setSkipHeader()
-        <a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#method_setSkipHeader" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_setSkipNotInHeader">
+        setSkipNotInHeader()
+        <a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#method_setSkipNotInHeader" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Traits/ExcelExportable.php"><a href="files/src-traits-excelexportable.html"><abbr title="src/Traits/ExcelExportable.php">ExcelExportable.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">199</span>
+    <span class="phpdocumentor-element-found-in__line">197</span>
 
     </aside>
 
@@ -1185,24 +1185,21 @@ the number of data rows that are processed at a time.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setSkipHeader</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$skipHeader</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
+                    <span class="phpdocumentor-signature__name">setSkipNotInHeader</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$skipNotInHeader</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
     
-        <section class="phpdocumentor-description"><p>The header row is the first row of the spreadsheet and is used to
-label the columns. If this is set to true, the export will skip
-writing the header row.</p>
-</section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$skipHeader</span>
+                <span class="phpdocumentor-signature__argument__name">$skipNotInHeader</span>
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>If true, the export will skip writing the header row.</p>
+                    <section class="phpdocumentor-description"><p>If true, the export will not write the header row.
+If false, the export will write the header row.</p>
 </section>
 
             </dd>
@@ -1281,7 +1278,7 @@ writing the header row.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Traits/ExcelExportable.php"><a href="files/src-traits-excelexportable.html"><abbr title="src/Traits/ExcelExportable.php">ExcelExportable.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">402</span>
+    <span class="phpdocumentor-element-found-in__line">417</span>
 
     </aside>
 
@@ -1338,7 +1335,7 @@ settings to.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Traits/ExcelExportable.php"><a href="files/src-traits-excelexportable.html"><abbr title="src/Traits/ExcelExportable.php">ExcelExportable.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">383</span>
+    <span class="phpdocumentor-element-found-in__line">398</span>
 
     </aside>
 
@@ -1416,7 +1413,7 @@ behavior.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Traits/ExcelExportable.php"><a href="files/src-traits-excelexportable.html"><abbr title="src/Traits/ExcelExportable.php">ExcelExportable.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">420</span>
+    <span class="phpdocumentor-element-found-in__line">435</span>
 
     </aside>
 
@@ -1465,7 +1462,7 @@ behavior.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Traits/ExcelExportable.php"><a href="files/src-traits-excelexportable.html"><abbr title="src/Traits/ExcelExportable.php">ExcelExportable.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">286</span>
+    <span class="phpdocumentor-element-found-in__line">297</span>
 
     </aside>
 
@@ -1522,7 +1519,7 @@ behavior.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Traits/ExcelExportable.php"><a href="files/src-traits-excelexportable.html"><abbr title="src/Traits/ExcelExportable.php">ExcelExportable.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">449</span>
+    <span class="phpdocumentor-element-found-in__line">464</span>
 
     </aside>
 
@@ -1577,7 +1574,7 @@ behavior.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Traits/ExcelExportable.php"><a href="files/src-traits-excelexportable.html"><abbr title="src/Traits/ExcelExportable.php">ExcelExportable.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">437</span>
+    <span class="phpdocumentor-element-found-in__line">452</span>
 
     </aside>
 
@@ -1632,7 +1629,7 @@ behavior.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Traits/ExcelExportable.php"><a href="files/src-traits-excelexportable.html"><abbr title="src/Traits/ExcelExportable.php">ExcelExportable.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">300</span>
+    <span class="phpdocumentor-element-found-in__line">311</span>
 
     </aside>
 
@@ -1689,7 +1686,7 @@ behavior.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Traits/ExcelExportable.php"><a href="files/src-traits-excelexportable.html"><abbr title="src/Traits/ExcelExportable.php">ExcelExportable.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">336</span>
+    <span class="phpdocumentor-element-found-in__line">351</span>
 
     </aside>
 
@@ -1743,7 +1740,7 @@ behavior.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Traits/ExcelExportable.php"><a href="files/src-traits-excelexportable.html"><abbr title="src/Traits/ExcelExportable.php">ExcelExportable.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">260</span>
+    <span class="phpdocumentor-element-found-in__line">261</span>
 
     </aside>
 
@@ -1771,6 +1768,21 @@ behavior.</p>
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#method_writeHeaders#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\PhpOffice\PhpSpreadsheet\Exception">Exception</abbr></span>
+                                                            
+                                             
+                                    </dd>
+                                            </dl>
 
     
 
@@ -1790,7 +1802,7 @@ behavior.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Traits/ExcelExportable.php"><a href="files/src-traits-excelexportable.html"><abbr title="src/Traits/ExcelExportable.php">ExcelExportable.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">314</span>
+    <span class="phpdocumentor-element-found-in__line">325</span>
 
     </aside>
 
@@ -1855,7 +1867,7 @@ behavior.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Traits/ExcelExportable.php"><a href="files/src-traits-excelexportable.html"><abbr title="src/Traits/ExcelExportable.php">ExcelExportable.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">350</span>
+    <span class="phpdocumentor-element-found-in__line">365</span>
 
     </aside>
 
@@ -1914,7 +1926,7 @@ behavior.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Traits/ExcelExportable.php"><a href="files/src-traits-excelexportable.html"><abbr title="src/Traits/ExcelExportable.php">ExcelExportable.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">454</span>
+    <span class="phpdocumentor-element-found-in__line">469</span>
 
     </aside>
 
@@ -2078,7 +2090,7 @@ behavior.</p>
                                             <li class=""><a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#property_hiddens">$hiddens</a></li>
                                             <li class=""><a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#property_mapping">$mapping</a></li>
                                             <li class=""><a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#property_metaSettings">$metaSettings</a></li>
-                                            <li class=""><a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#property_skipHeader">$skipHeader</a></li>
+                                            <li class=""><a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#property_skipNotInHeader">$skipNotInHeader</a></li>
                                             <li class=""><a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#property_subHeaders">$subHeaders</a></li>
                                     </ul>
             </li>
@@ -2093,7 +2105,7 @@ behavior.</p>
                                             <li class=""><a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#method_setHiddens">setHiddens()</a></li>
                                             <li class=""><a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#method_setMapping">setMapping()</a></li>
                                             <li class=""><a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#method_setMetaSettings">setMetaSettings()</a></li>
-                                            <li class=""><a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#method_setSkipHeader">setSkipHeader()</a></li>
+                                            <li class=""><a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#method_setSkipNotInHeader">setSkipNotInHeader()</a></li>
                                             <li class=""><a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#method_setSubHeaders">setSubHeaders()</a></li>
                                             <li class=""><a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#method_applyMetaSettings">applyMetaSettings()</a></li>
                                             <li class=""><a href="classes/Zuko-Flex2Cell-Traits-ExcelExportable.html#method_formatValue">formatValue()</a></li>
