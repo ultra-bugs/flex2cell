@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: "composer" # See documentation for possible values
+    directory: "/" # Location of package manifests
+    versioning-strategy: increase
+    schedule:
+      interval: "weekly"
+      day: "friday" # Might be you gonna love this song : Six days - DJ Shadow
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
